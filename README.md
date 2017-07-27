@@ -1,2 +1,2 @@
 # CMG-DB
-CMGDBu
+CMGDB
