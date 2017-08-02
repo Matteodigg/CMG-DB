@@ -10,9 +10,10 @@ MongoClient.connect(url, function(err, db) {
 
 	//CERCO tutte le varianti con lo stesso gene
 	
-	var docs = db.collection("SAMPLE").find({"SYMBOL": SYMBOL});
+	var docs = db.collection("VARIANTS").find({"SYMBOL": SYMBOL});
 		docs.forEach(function(docs){
-			console.log(docs.REF + ' ' +docs.ALT +' '+ docs.POS + ' ' + docs.CHROM +' '+ docs.SYMBOL)
+			var query_gene = docs.idVAR.split('-')
+			console.log(query_gene)
 			
 		
 		
