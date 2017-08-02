@@ -1,7 +1,7 @@
 var MongoClient = require('mongodb').MongoClient,
     assert = require('assert');
     fs = require('fs');
-var SYMBOL = "-"	
+var SYMBOL = "BRCA1"	
 var url = 'mongodb://localhost:27017/myproject';
 // Use connect method to connect to the Server
 MongoClient.connect(url, function(err, db) {
@@ -10,11 +10,11 @@ MongoClient.connect(url, function(err, db) {
 
 	//CERCO tutte le varianti con lo stesso gene
 	
-	var docs = db.collection("SAMPLE").find({"SYMBOL": SYMBOL});
+	var docs = db.collection("VARIANTS").find({"SYMBOL": SYMBOL});
 		docs.forEach(function(docs){
-			console.log(docs.REF + ' ' +docs.ALT +' '+ docs.POS + ' ' + docs.CHROM +' '+ docs.SYMBOL)
-			
-		
+			var query_gene = docs.idVAR.split('_')
+			console.log(query_gene)
+
 		
 	})
 	
