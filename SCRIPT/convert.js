@@ -3,34 +3,39 @@ var MongoClient = require('mongodb').MongoClient,
     assert = require('assert');
     fs = require('fs');
 const myModule = require('./mymodule');
+const _ = require('underscore')
 var tsv = require("node-tsv-json");
 var idPaz = "SN-188/11"
 var url = 'mongodb://localhost:27017/myproject';
+var last = require('array-prototype-last');
 // Use connect method to connect to the Server
 MongoClient.connect(url, function(err, db) {
 	assert.equal(null, err);
 	
 	var idVAR = '';
-	var nomefile = '04.tsv'
+	var nomefile = '/home/minime/git/CMG-DB/SCRIPT/04.tsv'
 	
-	fs.readFile(nomefile, 'utf8', function (err, tsv) {
-		
-		//var tsv is the TSV file with headers
-		var lines=tsv.split("\n");
-		var result = [];
-		var variants = [];
-		var headers=lines[0].split("\t");
-		headers.push("ConfermaSanger")
-		var s = 0
-		var lastlines = lines[lines.length-1]
-		if (lastlines == ""){
-			s = 1;			
-		}
+	fs.readFile(nomefile, 'utf8', function (err, tab) {
+		console.log('ciao')
 
-		for(var i=1;i<lines.length - s;i++){
+		//var tsv is the TSV file with headers
+	 	var lines=tab.split("\n");
+	 	var result = [];
+	 	var variants = [];
+
+	 	// Qui estraggo l'header e tolgo il carattere di break line /r
+	 	var headers = lines.shift().replace('\r','').split("\t");
+
+	 	// Qui aggiungo l'intestazione dell'header ConfermaSanger all'header
+		headers.push("ConfermaSanger")
+
+	 	// Ciclo _.each per processare le line contenute in lines  
+		_.each(lines, function(line, index, lines){
+			if (line === "\r" || line === '') {return;}
+			else{
 			var obj = {};
 			var vars = {};
-			var currentline=lines[i].split("\t");
+			var currentline=line.replace('\r','').split("\t");
 			currentline.push("-")
 			for(var j=0;j<24;j++){
 				obj[headers[j]] = currentline[j];
@@ -54,6 +59,7 @@ MongoClient.connect(url, function(err, db) {
 			variants.push(vars);
 	
 			}
+		})
 		
 		var str2 = JSON.stringify(variants);
 		var json2 = JSON.parse(str2)
@@ -66,12 +72,12 @@ MongoClient.connect(url, function(err, db) {
 				
 				
 		json2.forEach(function(rec){
-			myModule.insertIntoVARIANTS(rec, idPaz)
+			//myModule.insertIntoVARIANTS(rec, idPaz)
 		})
-		
+
 		
 	
-	})	
+	 })	
 })
 
 			
