@@ -1,13 +1,17 @@
+// Questa funzione richiede:
+// - nome del file. Il file in formato JSON (che posso ottenere dallo script convertToJSON.js)
+
 var MongoClient = require('mongodb').MongoClient,
-    assert = require('assert');
-    fs = require('fs');
+assert = require('assert');
+fs = require('fs');
 var url = 'mongodb://localhost:27017/myproject';
+
 // Use connect method to connect to the Server
 MongoClient.connect(url, function(err, db) {
 	assert.equal(null, err);
 	console.log("Connected correctly to server");
 	
-	
+	//
 	fs.readFile('36.json', 'utf8', function (err, data) {
 		if (err) throw err;
 		var json = JSON.parse(data);
